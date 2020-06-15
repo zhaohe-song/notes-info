@@ -1,0 +1,31 @@
+{
+  "name": "notes-info",
+  "version": "1.0.0",
+  "description": "Personal notes application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server",
+    "frontend": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run frontend\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "frontend"
+    ]
+  },
+  "author": "Zhaohe Song",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.18"
+  }
+}
