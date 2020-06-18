@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   Note
-    .create({ body: req.body.body })
+    .create({ content: req.body.content })
     .then(data => res.json(data))
     .catch(err => console.log(err.message))
 })

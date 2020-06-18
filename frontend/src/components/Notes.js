@@ -1,20 +1,32 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { getNotes } from '../actions/notes'
 import PropTypes from 'prop-types'
+import AddNote from './AddNote'
 
-const Notes = ({ notes, getNotes }) => {
-  useEffect(() => getNotes(), [])
-  return notes.map(note => <div key={note._id}>{note.body}</div>)
+const Notes = ({ isAuthenticated, notes, getNotes }) => {
+  useEffect(() => getNotes(), [isAuthenticated])
+  return (
+    <Fragment>
+      {isAuthenticated &&
+        <Fragment>
+          {notes.map(note => <div key={note._id}>{note.content}</div>)}
+          <AddNote />
+        </Fragment>
+      }
+    </Fragment>
+  )
 }
 
 Notes.propTypes = {
+  isAuthenticated: PropTypes.bool,
   notes: PropTypes.array.isRequired,
   getNotes: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
-  notes: state.notes.notes
+  isAuthenticated: state.users.isAuthenticated,
+  notes: state.notes.notes,
 })
 
 export default connect(mapStateToProps, { getNotes })(Notes)

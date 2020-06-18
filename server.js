@@ -6,17 +6,19 @@ connectDB()
 const express = require('express')
 const path = require('path')
 const chalk = require('chalk')
+const auth = require('./middleware/auth')
 
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-app.use('/api/notes', require('./routes/notes'))
-
 if (process.env.NODE_ENV === 'development') {
   const morgan = require('morgan')
   app.use(morgan('combined'))
 }
+
+app.use('/api/users', require('./routes/users'))
+app.use('/api/notes', auth, require('./routes/notes'))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.resolve(__dirname, 'frontend', 'build')))

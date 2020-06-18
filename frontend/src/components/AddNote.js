@@ -3,15 +3,15 @@ import { connect } from 'react-redux'
 import { addNote } from '../actions/notes'
 
 const AddNote = ({ addNote }) => {
-  const [body, setBody] = useState('')
+  const [content, setContent] = useState('')
   function onSubmit(e) {
     e.preventDefault()
-    addNote(body)
-    setBody('')
+    addNote(content)
+    setContent('')
   }
   return (
     <form onSubmit={onSubmit}>
-      <input value={body} onChange={e => setBody(e.target.value)} />
+      <input value={content} onChange={e => setContent(e.target.value)} />
     </form>
   )
 }
