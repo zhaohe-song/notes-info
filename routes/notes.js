@@ -1,20 +1,14 @@
 const express = require('express')
-const Note = require('../models/Note')
+const { getNotes, addNote, updateNote, deleteNote } = require('../controllers/notes')
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  Note
-    .find()
-    .then(data => res.json(data))
-    .catch(err => console.log(err.message))
-})
+router.get('/', getNotes)
 
-router.post('/', (req, res) => {
-  Note
-    .create({ content: req.body.content })
-    .then(data => res.json(data))
-    .catch(err => console.log(err.message))
-})
+router.post('/', addNote)
+
+router.put('/:id', updateNote)
+
+router.delete('/:id', deleteNote)
 
 module.exports = router

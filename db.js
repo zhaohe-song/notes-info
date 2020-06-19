@@ -6,7 +6,8 @@ const connectDB = async () => {
     const connect = await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true
+      useCreateIndex: true,
+      useFindAndModify: false
     })
     console.log(chalk.green(`MongoDB connected - host: ${connect.connection.host}; port: ${connect.connection.port}...`))
   } catch (err) {
