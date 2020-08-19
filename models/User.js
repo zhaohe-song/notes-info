@@ -8,11 +8,20 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    lowercase: true
   },
   password: {
     type: String,
     required: true
+  },
+  verifyString: {
+    type: String,
+    required: true
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
   },
   register_date: {
     type: Date,

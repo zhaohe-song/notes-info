@@ -6,7 +6,7 @@ const chalk = require('chalk')
 // @access Private
 exports.getNotes = async (req, res) => {
   try {
-    const notes = await Note.find({ user: req.user.id })
+    const notes = await Note.find({ user: req.user.id }).lean()
     res.json(notes)
   } catch (err) {
     console.log(chalk.red(`${err.name}: ${err.message}`))

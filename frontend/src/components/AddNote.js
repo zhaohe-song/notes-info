@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { Modal, ModalBody, ModalFooter } from 'reactstrap'
 import { connect } from 'react-redux'
 import { addNote } from '../actions/notes'
 
@@ -18,7 +18,7 @@ const AddNote = ({ addNote }) => {
   }
   return (
     <Fragment>
-      <button className="btn btn-primary my-3" onClick={toggleAdd}>Add a new note</button>
+      <button className="btn btn-outline-primary my-3" onClick={toggleAdd}>Add a new note</button>
       <Modal isOpen={addModal} toggle={toggleAdd}>
         <ModalBody>
           <form onSubmit={handleAdd}>
@@ -39,8 +39,8 @@ const AddNote = ({ addNote }) => {
           </form>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" onClick={handleAdd}>Add</button>
-          <button className="btn btn-secondary" onClick={toggleAdd}>Cancel</button>
+          <button className="btn btn-outline-primary" onClick={handleAdd}>Add</button>
+          <button className="btn btn-outline-secondary" onClick={toggleAdd}>Cancel</button>
         </ModalFooter>
       </Modal>
     </Fragment>

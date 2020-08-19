@@ -29,10 +29,10 @@ const Note = ({ note, updateNote, deleteNote }) => {
     <Fragment>
       <li className="list-group-item list-group-item-action">
         <div>
-          <button className="btn btn-sm btn-primary" onClick={toggleDelete}>
+          <button className="btn btn-sm btn-outline-primary" onClick={toggleDelete}>
             <i className="fas fa-trash-alt" title="Delete it"></i>
           </button>
-          <button className="btn btn-sm btn-primary mx-3" onClick={toggleUpdate}>
+          <button className="btn btn-sm btn-outline-primary mx-3" onClick={toggleUpdate}>
             <i className="fas fa-edit" title="Edit it"></i>
           </button>
         </div>
@@ -45,8 +45,8 @@ const Note = ({ note, updateNote, deleteNote }) => {
           Are you sure you want to delete this note?
         </ModalHeader>
         <ModalFooter>
-          <button className="btn btn-danger" onClick={() => deleteNote(note._id)}>Delete</button>
-          <button className="btn btn-secondary" onClick={toggleDelete}>Cancel</button>
+          <button className="btn btn-outline-danger" onClick={() => deleteNote(note._id)}>Delete</button>
+          <button className="btn btn-outline-secondary" onClick={toggleDelete}>Cancel</button>
         </ModalFooter>
       </Modal>
       <Modal isOpen={updateModal} toggle={toggleUpdate}>
@@ -68,8 +68,8 @@ const Note = ({ note, updateNote, deleteNote }) => {
           </form>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" onClick={handleUpdate}>Update</button>{' '}
-          <button className="btn btn-secondary" onClick={toggleUpdate}>Cancel</button>
+          <button className="btn btn-outline-primary" onClick={handleUpdate}>Update</button>
+          <button className="btn btn-outline-secondary" onClick={toggleUpdate}>Cancel</button>
         </ModalFooter>
       </Modal>
     </Fragment>

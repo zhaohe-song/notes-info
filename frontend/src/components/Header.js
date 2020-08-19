@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
-import { registerUser, loginUser, logoutUser } from '../actions/users'
+import { registerUser, loginUser } from '../actions/users'
+import { updatePassword2 } from '../actions/user'
+import axios from 'axios'
 
-const Header = ({ users, registerUser, loginUser, logoutUser }) => {
+const Header = ({ users, registerUser, loginUser, updatePassword2 }) => {
   const { isAuthenticated, user } = users
 
   const [registerModal, setRegisterModal] = useState(false)
@@ -21,7 +23,7 @@ const Header = ({ users, registerUser, loginUser, logoutUser }) => {
   function toggleLogin() {
     setLoginModal(prev => !prev)
   }
-  const loginEmail = useRef()
+  const [loginEmail, setLoginEmail] = useState('')
   const loginPassword = useRef()
 
   function handleRegister(e) {
@@ -38,19 +40,23 @@ const Header = ({ users, registerUser, loginUser, logoutUser }) => {
       toast('You enter 2 different password')
       return
     }
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      toast('Please input a real email')
+      return
+    }
     registerUser({ username, email, password })
     setRegisterModal(false)
   }
 
   function handleLogin(e) {
     e.preventDefault()
-    const email = loginEmail.current.value
     const password = loginPassword.current.value
-    if (!email || !password) {
+    if (!loginEmail || !password) {
       toast('Please input all fields')
       return
     }
-    loginUser({ email, password })
+    loginUser(loginEmail, password)
+    setLoginEmail('')
     setLoginModal(false)
   }
 
@@ -61,29 +67,77 @@ const Header = ({ users, registerUser, loginUser, logoutUser }) => {
     registerPassword2.current.value = ''
   }
   function resetLogin() {
-    loginEmail.current.value = ''
+    setLoginEmail('')
     loginPassword.current.value = ''
+  }
+
+  const [forgetModal, setForgetModal] = useState(false)
+  function toggleForget() {
+    setForgetModal(prev => !prev)
+  }
+
+  const verifyCode = useRef()
+  const newPassword = useRef()
+  const newPassword2 = useRef()
+  const [code, setCode] = useState(Math.random().toString(36).slice(-6))
+
+  async function handleForget() {
+    if (!loginEmail) {
+      toast('Input your email to get the code to reset your password')
+      return
+    }
+    try {
+      await axios.post('/api/users/sendcode', { loginEmail, code })
+    } catch (err) {
+      toast(`Error ${err.response.status}: ${err.response.data.message}`)
+      return
+    }
+    setLoginModal(false)
+    setForgetModal(true)
+  }
+
+  function handleUpdatePassword(e) {
+    e.preventDefault()
+    const vCode = verifyCode.current.value
+    const password = newPassword.current.value
+    const password2 = newPassword2.current.value
+
+    if (!vCode || !password || !password2) {
+      toast('Please input all fields')
+      return
+    }
+    if (code !== vCode) {
+      toast('You enter wrong verify code')
+      return
+    }
+    if (password !== password2) {
+      toast('You enter 2 different password')
+      return
+    }
+    updatePassword2(password, loginEmail)
+    setLoginEmail('')
+    setForgetModal(false)
+  }
+  function resetForget() {
+    verifyCode.current.value = ''
+    newPassword.current.value = ''
+    newPassword2.current.value = ''
   }
 
   const authLinks = (
     <ul className="navbar-nav ml-auto">
-      <span className="navbar-text mr-3">
-        <strong>{user ? `Welcome ${user.username}` : ''}</strong>
-      </span>
       <li className="nav-item">
-        <button onClick={() => logoutUser()} className="btn btn-secondary">
-          Logout
-        </button>
+        <Link to="/user" className="nav-link btn btn-outline-secondary">{user ? `Welcome ${user.username}` : ''}</Link>
       </li>
     </ul>
   )
   const guestLinks = (
     <ul className="navbar-nav ml-auto">
       <li className="nav-item">
-        <button className="btn btn-primary mr-2 mt-2" onClick={() => setRegisterModal(true)} >Register</button>
+        <button className="btn btn-outline-primary mr-2 mt-2" onClick={() => setRegisterModal(true)} >Register</button>
       </li>
       <li className="nav-item">
-        <button className="btn btn-primary mt-2" onClick={() => setLoginModal(true)} >Login</button>
+        <button className="btn btn-outline-primary mt-2" onClick={() => setLoginModal(true)} >Login</button>
       </li>
     </ul>
   )
@@ -130,8 +184,8 @@ const Header = ({ users, registerUser, loginUser, logoutUser }) => {
           </form>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" onClick={handleRegister}>Register</button>{' '}
-          <button className="btn btn-secondary" onClick={resetRegister}>Reset</button>
+          <button className="btn btn-outline-primary" onClick={handleRegister}>Register</button>
+          <button className="btn btn-outline-secondary" onClick={resetRegister}>Reset</button>
         </ModalFooter>
       </Modal>
 
@@ -141,7 +195,7 @@ const Header = ({ users, registerUser, loginUser, logoutUser }) => {
           <form onSubmit={handleLogin}>
             <div className="form-group">
               <label htmlFor="loginEmail">Email</label>
-              <input type="email" id="loginEmail" ref={loginEmail} className="form-control" />
+              <input type="email" id="loginEmail" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} className="form-control" />
             </div>
             <div className="form-group">
               <label htmlFor="loginPassword">Password</label>
@@ -151,8 +205,33 @@ const Header = ({ users, registerUser, loginUser, logoutUser }) => {
           </form>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" onClick={handleLogin}>Login</button>{' '}
-          <button className="btn btn-secondary" onClick={resetLogin}>Reset</button>
+          <button className="btn btn-outline-primary" onClick={handleLogin}>Login</button>
+          <button className="btn btn-outline-secondary" onClick={resetLogin}>Reset</button>
+          <button className="btn btn-outline-secondary" onClick={handleForget}>Forget Password</button>
+        </ModalFooter>
+      </Modal>
+      <Modal isOpen={forgetModal} toggle={toggleForget}>
+        <ModalHeader toggle={toggleForget}>Update your password</ModalHeader>
+        <ModalBody>
+          <form onSubmit={handleUpdatePassword}>
+            <div className="form-group">
+              <label htmlFor="verifyCode">Enter verify code you received in your email</label>
+              <input id="verifyCode" ref={verifyCode} className="form-control" />
+            </div>
+            <div className="form-group">
+              <label htmlFor="newPassword">Password</label>
+              <input type="password" id="newPassword" ref={newPassword} className="form-control" />
+            </div>
+            <div className="form-group">
+              <label htmlFor="newPassword2">Repeat Password</label>
+              <input type="password" id="newPassword2" ref={newPassword2} className="form-control" />
+            </div>
+            <input hidden type="submit" value="Submit" />
+          </form>
+        </ModalBody>
+        <ModalFooter>
+          <button className="btn btn-outline-primary" onClick={handleUpdatePassword}>Update</button>
+          <button className="btn btn-outline-secondary" onClick={resetForget}>Reset</button>
         </ModalFooter>
       </Modal>
     </Fragment>
@@ -163,4 +242,4 @@ const mapStateToProps = state => ({
   users: state.users
 })
 
-export default connect(mapStateToProps, { registerUser, loginUser, logoutUser })(Header)
+export default connect(mapStateToProps, { registerUser, loginUser, updatePassword2 })(Header)

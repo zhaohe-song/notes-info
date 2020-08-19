@@ -5,7 +5,6 @@ import { toast } from 'react-toastify'
 export const registerUser = ({ username, email, password }) => async dispatch => {
   try {
     const res = await axios.post('/api/users/register', { username, email, password })
-    toast(`Welcome ${res.data.user.username}`)
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
@@ -16,10 +15,9 @@ export const registerUser = ({ username, email, password }) => async dispatch =>
   }
 }
 
-export const loginUser = ({ email, password }) => async dispatch => {
+export const loginUser = (email, password) => async dispatch => {
   try {
     const res = await axios.post('/api/users/login', { email, password })
-    toast(`Welcome ${res.data.user.username}`)
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data

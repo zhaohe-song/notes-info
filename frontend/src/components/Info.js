@@ -4,7 +4,7 @@ const Info = ({ data }) => {
   return (
     <div className="col-md-6">
       <div className="card mb-4 shadow">
-        <a href={data.url}>
+        <a href={data.url} target="_blank" rel="noopener noreferrer">
           <img src={data.urlToImage} className="card-img-top" alt="" />
           <div className="card-body">
             <h5 className="card-title">{data.title}</h5>

@@ -1,6 +1,7 @@
-require('dotenv').config()
+const dotenv = require('dotenv')
+dotenv.config({ path: './config/config.env' })
 
-const connectDB = require('./db')
+const connectDB = require('./config/db')
 connectDB()
 
 const express = require('express')
@@ -14,7 +15,7 @@ app.use(express.urlencoded({ extended: false }))
 
 if (process.env.NODE_ENV === 'development') {
   const morgan = require('morgan')
-  app.use(morgan('combined'))
+  app.use(morgan('dev'))
 }
 
 app.use('/api/users', require('./routes/users'))
