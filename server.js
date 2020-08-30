@@ -20,6 +20,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use('/api/users', require('./routes/users'))
 app.use('/api/notes', auth, require('./routes/notes'))
+app.use('/api/publicNotes', require('./routes/publicNotes'))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.resolve(__dirname, 'frontend', 'build')))

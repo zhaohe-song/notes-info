@@ -21,6 +21,7 @@ exports.addNote = async (req, res) => {
   try {
     const note = await Note.create({
       content: req.body.content,
+      status: req.body.status,
       user: req.user.id
     })
     // const note = new Note({
@@ -43,6 +44,7 @@ exports.updateNote = async (req, res) => {
   try {
     const note = await Note.findById(req.params.id)
     note.content = req.body.content
+    note.status = req.body.status
     await note.save()
     // const note = await Note.findByIdAndUpdate(
     //   req.params.id,

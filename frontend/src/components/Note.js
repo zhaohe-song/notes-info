@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 const Note = ({ note, updateNote, deleteNote }) => {
   const [updateModal, setUpdateModal] = useState(false)
   const [content, setContent] = useState(note.content)
+  const [status, setStatus] = useState(note.status)
   function toggleUpdate() {
     setUpdateModal(prev => !prev)
   }
@@ -16,7 +17,7 @@ const Note = ({ note, updateNote, deleteNote }) => {
       toast('You cannot input empty note')
       return
     }
-    updateNote(content, note._id)
+    updateNote(content, note._id, status)
     setUpdateModal(false)
   }
 
@@ -35,6 +36,7 @@ const Note = ({ note, updateNote, deleteNote }) => {
           <button className="btn btn-sm btn-outline-primary mx-3" onClick={toggleUpdate}>
             <i className="fas fa-edit" title="Edit it"></i>
           </button>
+          <span className="badge badge-secondary">{note.status}</span>
         </div>
         <div className="mt-3">
           {note.content.split('\n').map((line, index) => <div key={index}>{line}</div>)}
@@ -52,19 +54,28 @@ const Note = ({ note, updateNote, deleteNote }) => {
       <Modal isOpen={updateModal} toggle={toggleUpdate}>
         <ModalBody>
           <form onSubmit={handleUpdate}>
-            <textarea
-              rows="5"
-              className="form-control"
-              value={content}
-              onChange={e => setContent(e.target.value)}
-              onKeyDown={e => {
-                if (e.keyCode === 13 && e.shiftKey === true) {
-                  e.preventDefault()
-                  handleUpdate(e)
-                }
-              }}
-            >
-            </textarea>
+            <div className="form-group">
+              <textarea
+                rows="5"
+                className="form-control"
+                value={content}
+                onChange={e => setContent(e.target.value)}
+                onKeyDown={e => {
+                  if (e.keyCode === 13 && e.shiftKey === true) {
+                    e.preventDefault()
+                    handleUpdate(e)
+                  }
+                }}
+              >
+              </textarea>
+            </div>
+            <div className="form-group">
+              <label htmlFor="status">Note status:</label>
+              <select className="form-control" id="status" value={status} onChange={e => setStatus(e.target.value)}>
+                <option value="public">public</option>
+                <option value="private">private</option>
+              </select>
+            </div>
           </form>
         </ModalBody>
         <ModalFooter>
