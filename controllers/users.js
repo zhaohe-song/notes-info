@@ -80,7 +80,7 @@ exports.verifyUser = async (req, res) => {
     if (user.verifyString === req.query.verifystring) {
       user.isVerified = true
       await user.save()
-      res.send(`<strong>Hi ${user.username}, You have successfully verified your Email</strong> <br> <br> <a href="http://localhost:3000">Go to Main Page</a>`)
+      res.send(`<strong>Hi ${user.username}, You have successfully verified your Email</strong> <br> <br> <a href=${host}>Go to Main Page</a>`)
     }
   } catch (err) {
     console.log(chalk.red(`${err.name}: ${err.message}`))
