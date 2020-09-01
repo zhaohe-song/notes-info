@@ -31,29 +31,29 @@ const Notes = ({ isAuthenticated, notes, publicNotes, getNotes, getPublicNotes }
     <Fragment>
       {
         isAuthenticated ? (
-          isLoading ? (
+          (isLoading || isPublicLoading) ? (
             <Spinner />
           ) : (
+              <Fragment>
+                <AddNote />
+                <div className="list-group">
+                  {notes.map(note => <Note key={note._id} note={note} />)}
+                </div>
+                <hr />
+                <h3>Public Notes</h3>
+                <div className="row">
+                  {publicNotes.map(note => <PublicNote key={note._id} note={note} isAuthenticated={isAuthenticated} />)}
+                </div>
+              </Fragment>
+            )
+        ) : (
             <Fragment>
-              <AddNote />
-              <div className="list-group">
-                {notes.map(note => <Note key={note._id} note={note} />)}
-              </div>
-              <hr />
-              <h3>Public Notes</h3>
+              <div className="text-warning my-3">Please login to see private notes</div>
               <div className="row">
-                {publicNotes.map(note => <PublicNote key={note._id} note={note} />)}
+                {publicNotes.map(note => <PublicNote key={note._id} note={note} isAuthenticated={isAuthenticated} />)}
               </div>
             </Fragment>
           )
-        ) : (
-          <Fragment>
-            <div className="text-warning my-3">Please login to see private notes</div>
-            <div className="row">
-              {publicNotes.map(note => <PublicNote key={note._id} note={note} />)}
-            </div>
-          </Fragment>
-        )
       }
     </Fragment>
   )

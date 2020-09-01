@@ -85,6 +85,7 @@ export default function (state = initialState, action) {
           })
         }
       }
+      break
     case DELETE_NOTE:
       return {
         ...state,

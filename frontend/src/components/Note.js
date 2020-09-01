@@ -1,10 +1,19 @@
 import React, { useState, Fragment } from 'react'
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { Modal, ModalHeader, ModalBody, ModalFooter, Tooltip } from 'reactstrap'
 import { connect } from 'react-redux'
 import { updateNote, deleteNote } from '../actions/notes'
 import { toast } from 'react-toastify'
 
 const Note = ({ note, updateNote, deleteNote }) => {
+  const [deleteTooltip, setDeleteTooltip] = useState(false)
+  const [editTooltip, setEditTooltip] = useState(false)
+  function toggleDeleteTooltip() {
+    setDeleteTooltip(prev => !prev)
+  }
+  function toggleEditTooltip() {
+    setEditTooltip(prev => !prev)
+  }
+
   const [updateModal, setUpdateModal] = useState(false)
   const [content, setContent] = useState(note.content)
   const [status, setStatus] = useState(note.status)
@@ -30,12 +39,20 @@ const Note = ({ note, updateNote, deleteNote }) => {
     <Fragment>
       <li className="list-group-item list-group-item-action">
         <div>
-          <button className="btn btn-sm btn-outline-primary" onClick={toggleDelete}>
-            <i className="fas fa-trash-alt" title="Delete it"></i>
+          <button className="btn btn-sm btn-outline-primary" onClick={toggleDelete} id="delete" >
+            <i className="fas fa-trash-alt"></i>
           </button>
-          <button className="btn btn-sm btn-outline-primary mx-3" onClick={toggleUpdate}>
-            <i className="fas fa-edit" title="Edit it"></i>
+          <Tooltip placement="top" isOpen={deleteTooltip} target="delete" toggle={toggleDeleteTooltip}>
+            Delete it
+          </Tooltip>
+
+          <button className="btn btn-sm btn-outline-primary mx-3" onClick={toggleUpdate} id="edit" >
+            <i className="fas fa-edit"></i>
           </button>
+          <Tooltip placement="top" isOpen={editTooltip} target="edit" toggle={toggleEditTooltip}>
+            Edit it
+          </Tooltip>
+
           <span className="badge badge-secondary">{note.status}</span>
         </div>
         <div className="mt-3">
