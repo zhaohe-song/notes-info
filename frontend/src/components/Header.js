@@ -155,6 +155,9 @@ const Header = ({ users, registerUser, loginUser, updatePassword2 }) => {
             <li className="nav-item">
               <Link to="/info" className="nav-link">Info</Link>
             </li>
+            <li className="nav-item">
+              <Link to="/chat" className="nav-link">Chat Room</Link>
+            </li>
           </ul>
           {isAuthenticated ? authLinks : guestLinks}
         </div>

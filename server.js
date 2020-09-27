@@ -27,6 +27,28 @@ if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html')))
 }
 
-app.listen(process.env.PORT, () => {
+const http = require('http')
+const server = http.createServer(app)
+
+server.listen(process.env.PORT, () => {
   console.log(chalk.green(`Server running in ${process.env.NODE_ENV} mode on port ${process.env.PORT}...`))
+})
+
+const uuid = require('uuid')
+const webSocketServer = require('websocket').server
+const wsServer = new webSocketServer({ httpServer: server })
+const client = {}
+
+wsServer.on('request', request => {
+  const userID = uuid.v4()
+  const connection = request.accept(null, request.origin)
+  client[userID] = connection
+
+  connection.on('message', message => {
+    if (message.type === 'utf8') {
+      for (key in client) {
+        client[key].sendUTF(message.utf8Data)
+      }
+    }
+  })
 })

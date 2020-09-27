@@ -10,6 +10,7 @@ import Infos from './components/Infos'
 import Notes from './components/Notes'
 import { authUser } from './actions/users'
 import User from './components/User'
+import Chat from './components/Chat'
 
 function App() {
   useEffect(() => {
@@ -26,6 +27,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={Notes} />
             <Route exact path="/info" component={Infos} />
+            <Route exact path="/chat" component={Chat} />
             <Route exact path="/user" component={User} />
           </Switch>
         </div>
