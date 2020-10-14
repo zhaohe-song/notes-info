@@ -153,7 +153,7 @@ const Header = ({ users, registerUser, loginUser, updatePassword2 }) => {
               <Link to="/" className="nav-link">Notes</Link>
             </li>
             <li className="nav-item">
-              <Link to="/info" className="nav-link">Info</Link>
+              <Link to="/info" className="nav-link">NY Times</Link>
             </li>
             <li className="nav-item">
               <Link to="/chat" className="nav-link">Chat Room</Link>

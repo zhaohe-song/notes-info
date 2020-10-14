@@ -9,9 +9,9 @@ const Infos = () => {
 
   useEffect(() => {
     async function fetchInfos() {
-      // United States technology news API
-      const res = await axios.get('https://newsapi.org/v2/top-headlines?country=us&category=technology&apiKey=e210ca838b594cbfad72b49add8b3beb')
-      setInfo(res.data.articles)
+      // New York Times API
+      const res = await axios.get('https://api.nytimes.com/svc/mostpopular/v2/viewed/1.json?api-key=PhRz6WAoeXlnMGINvwA627u8Vgn68ydO')
+      setInfo(res.data.results)
       setIsLoading(false)
     }
     fetchInfos()
@@ -23,7 +23,7 @@ const Infos = () => {
 
   return (
     <div className="row">
-      {info.map(data => <Info key={data.publishedAt} data={data} />)}
+      {info.map(data => <Info key={data.id} data={data} />)}
     </div>
   )
 }
