@@ -28,7 +28,7 @@ exports.registerUser = async (req, res) => {
       service: 'gmail',
       auth: {
         user: 'notesfrominfo@gmail.com',
-        pass: 'widgak-gekru1-byhJoq'
+        pass: process.env.GMAIL_PASSWORD
       }
     })
     const host = req.get('host')

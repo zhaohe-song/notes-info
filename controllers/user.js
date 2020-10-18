@@ -56,7 +56,7 @@ exports.sendVerifyCode = async (req, res) => {
       service: 'gmail',
       auth: {
         user: 'notesfrominfo@gmail.com',
-        pass: 'widgak-gekru1-byhJoq'
+        pass: process.env.GMAIL_PASSWORD
       }
     })
     html = `Hello, please copy the verify code to reset your password. <br> <br> <strong style="font-size: 3em">${req.body.code}</strong>`
