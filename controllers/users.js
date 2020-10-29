@@ -75,12 +75,12 @@ exports.verifyUser = async (req, res) => {
     const host = req.get('host')
     const user = await User.findById(req.query.id)
     if (user.isVerified === true) {
-      return res.send(`<strong>You have already verified your Email</strong> <br> <br> <a href="http://${host}">Go to Main Page</a>`)
+      return res.send(`<strong>You have already verified your Email</strong> <br> <br> <a href="/">Go to Main Page</a>`)
     }
     if (user.verifyString === req.query.verifystring) {
       user.isVerified = true
       await user.save()
-      return res.send(`<strong>Hi ${user.username}, You have successfully verified your Email</strong> <br> <br> <a href=${host}>Go to Main Page</a>`)
+      return res.send(`<strong>Hi ${user.username}, You have successfully verified your Email</strong> <br> <br> <a href="/">Go to Main Page</a>`)
     }
   } catch (err) {
     console.log(chalk.red(`${err.name}: ${err.message}`))
