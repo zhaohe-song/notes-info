@@ -25,10 +25,10 @@ function App() {
         <Header />
         <div className="container">
           <Switch>
-            <Route exact path="/" component={Notes} />
-            <Route exact path="/info" component={Infos} />
-            <Route exact path="/chat" component={Chat} />
-            <Route exact path="/user" component={User} />
+            <Route exact path="/" children={<Notes />} />
+            <Route exact path="/info" children={<Infos />} />
+            <Route exact path="/chat" children={<Chat />} />
+            <Route exact path="/user" children={<User />} />
           </Switch>
         </div>
         <ToastContainer />
